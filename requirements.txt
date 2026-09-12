@@ -1,0 +1,4 @@
+rumps>=0.4.0
+pyobjc-framework-Cocoa>=12.2
+pyobjc-framework-WebKit>=12.2
+pyinstaller>=6.0
