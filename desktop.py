@@ -27,13 +27,11 @@ from Cocoa import (
 from Foundation import NSURL, NSURLRequest
 from WebKit import WKWebView
 
-from app import Handler
+from app import HOST, OLLAMA_HEALTH_URL, PORT, Handler
 
 
-HOST = "127.0.0.1"
-PORT = 8000
 URL = f"http://{HOST}:{PORT}/"
-OLLAMA_URL = "http://127.0.0.1:11434/api/tags"
+OLLAMA_URL = OLLAMA_HEALTH_URL
 server = None
 ollama_process = None
 

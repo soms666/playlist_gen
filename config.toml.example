@@ -1,0 +1,18 @@
+[spotify]
+client_id = "YOUR_SPOTIFY_CLIENT_ID"
+redirect_uri = "http://127.0.0.1:8000/callback"
+scopes = [
+  "user-read-private",
+  "user-top-read",
+  "user-read-recently-played",
+  "playlist-modify-private",
+]
+
+[server]
+host = "127.0.0.1"
+port = 8000
+
+[ollama]
+chat_url = "http://127.0.0.1:11434/api/chat"
+health_url = "http://127.0.0.1:11434/api/tags"
+model = "ornith:9b"

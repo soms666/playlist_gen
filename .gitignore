@@ -1,6 +1,7 @@
 __pycache__/
 .DS_Store
 .env
+config.toml
 .venv/
 build/
 dist/

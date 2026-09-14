@@ -10,20 +10,41 @@ import os
 import random
 import secrets
 import subprocess
+import tomllib
 import traceback
 import urllib.parse
 import urllib.request
 import urllib.error
+from pathlib import Path
 
 
-CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID", "ffbdc5b52bc949d596df17992ce2634e")
-REDIRECT_URI = "http://127.0.0.1:8000/callback"
-SCOPES = "user-read-private user-top-read user-read-recently-played playlist-modify-private"
+def load_config():
+    configured_path = os.environ.get("GEN_PLAYLIST_CONFIG")
+    paths = [Path(configured_path)] if configured_path else []
+    paths.extend([
+        Path.home() / "Library" / "Application Support" / "Gen Playlist" / "config.toml",
+        Path.cwd() / "config.toml",
+        Path(__file__).resolve().with_name("config.toml"),
+    ])
+    for path in paths:
+        if path and path.is_file():
+            with path.open("rb") as config_file:
+                return tomllib.load(config_file)
+    raise RuntimeError("Missing config.toml; copy config.toml.example and configure it first")
+
+
+CONFIG = load_config()
+CLIENT_ID = CONFIG["spotify"]["client_id"]
+REDIRECT_URI = CONFIG["spotify"]["redirect_uri"]
+SCOPES = " ".join(CONFIG["spotify"]["scopes"])
+HOST = CONFIG["server"]["host"]
+PORT = int(CONFIG["server"]["port"])
 AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = "https://accounts.spotify.com/api/token"
 API_URL = "https://api.spotify.com/v1"
-OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "ornith:9b")
+OLLAMA_URL = CONFIG["ollama"]["chat_url"]
+OLLAMA_MODEL = CONFIG["ollama"]["model"]
+OLLAMA_HEALTH_URL = CONFIG["ollama"]["health_url"]
 
 oauth_state = None
 oauth_verifier = None
